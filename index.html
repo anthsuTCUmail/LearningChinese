@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Four Tones 四聲練習</title>
+<meta name="theme-color" content="#EEF2F5">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&text=媽麻馬罵八拔把爸衣姨椅意湯糖躺燙詩十史是聲&display=swap">
+<style>
+/* Layout: one-column phone-first trainer; a five-line pitch "staff" (Chao tone levels 1–5) is the centerpiece. */
+:root{
+  --bg:#EEF2F5; --surface:#FFFFFF; --ink:#15202B; --muted:#5B6B7A; --line:#D3DCE4; --soft:#E3EAF0;
+  --accent:#2457C5; --accent-ink:#FFFFFF; --rec:#D63A4A;
+  --t1:#2D6BE0; --t2:#12936A; --t3:#B87400; --t4:#D63A4A;
+  --font-ui:"Lexend", system-ui, -apple-system, "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  --font-han:"Noto Serif TC", "Songti TC", "PMingLiU", serif;
+  --r:14px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F151B; --surface:#18212A; --ink:#E7EEF4; --muted:#93A3B2; --line:#2B3744; --soft:#212C37;
+    --accent:#6E9BFF; --accent-ink:#0F151B; --rec:#FF6B78;
+    --t1:#6E9BFF; --t2:#3CC895; --t3:#F0AE3A; --t4:#FF6B78; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F151B; --surface:#18212A; --ink:#E7EEF4; --muted:#93A3B2; --line:#2B3744; --soft:#212C37;
+  --accent:#6E9BFF; --accent-ink:#0F151B; --rec:#FF6B78;
+  --t1:#6E9BFF; --t2:#3CC895; --t3:#F0AE3A; --t4:#FF6B78; color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--font-ui);-webkit-tap-highlight-color:transparent}
+.wrap{max-width:560px;margin:0 auto;padding-block:14px 32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.han{font-family:var(--font-han);font-weight:700}
+.zh{color:var(--muted);font-size:.85em}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.mark{width:42px;height:42px;border-radius:12px;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-size:24px}
+.brand h1{margin:0;font-size:19px;line-height:1.1;font-weight:700;letter-spacing:-.01em}
+.brand p{margin:0;font-size:12.5px;color:var(--muted)}
+.ghost{border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-size:13px;font-weight:500;background:var(--surface)}
+
+.warn{background:color-mix(in srgb,var(--rec) 12%,var(--surface));border:1px solid color-mix(in srgb,var(--rec) 40%,transparent);border-radius:var(--r);padding:10px 12px;font-size:13.5px}
+
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--soft);border-radius:999px;padding:4px;gap:4px}
+.tabs button{border-radius:999px;padding:8px 6px;font-weight:600;font-size:14px;color:var(--muted)}
+.tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgb(0 0 0 / .12)}
+
+.sets{display:flex;gap:6px;flex-wrap:wrap}
+.sets button{padding:6px 14px;border-radius:999px;border:1px solid var(--line);font-weight:500;font-size:14px;background:var(--surface)}
+.sets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+.tones{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.tone{position:relative;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:8px 4px 7px;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:0}
+.tone .han{font-size:26px;line-height:1.15}
+.tone .py{font-size:13px;font-weight:600}
+.tone .chao{font-size:10.5px;color:var(--muted);letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.tone[aria-pressed="true"]{border-color:var(--tc);box-shadow:inset 0 0 0 1.5px var(--tc)}
+.tone .badge{position:absolute;top:-7px;right:-5px;font-size:10.5px;font-weight:700;background:var(--tc);color:var(--surface);border-radius:999px;padding:1px 6px;font-variant-numeric:tabular-nums}
+
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.prompt{display:flex;align-items:center;gap:14px}
+.prompt .big{font-size:64px;line-height:1;color:var(--tc)}
+.prompt .meta{display:flex;flex-direction:column;min-width:0}
+.prompt .py{font-size:26px;font-weight:700;line-height:1.1}
+.prompt .gloss{color:var(--muted);font-size:14px}
+.prompt .tname{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--tc)}
+.staffbox{position:relative}
+canvas#staff{width:100%;height:170px;display:block;border-radius:10px;background:var(--soft)}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:18px;height:0;border-top:3px dashed var(--tc);vertical-align:middle;margin-right:5px}
+.legend b{display:inline-block;width:18px;height:3px;background:var(--ink);vertical-align:middle;margin-right:5px;border-radius:2px}
+
+.result{display:flex;align-items:center;gap:14px;min-height:64px}
+.ring{--p:0;--rc:var(--muted);width:64px;height:64px;flex:none;border-radius:50%;background:conic-gradient(var(--rc) calc(var(--p)*1%),var(--soft) 0);display:grid;place-items:center}
+.ring span{width:50px;height:50px;border-radius:50%;background:var(--surface);display:grid;place-items:center;font-weight:700;font-size:19px;font-variant-numeric:tabular-nums}
+.verdict{display:flex;flex-direction:column;min-width:0}
+.verdict strong{font-size:16px}
+.verdict small{color:var(--muted);font-size:13px;line-height:1.4}
+
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{border-radius:12px;padding:12px 10px;font-weight:600;font-size:14.5px;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn svg{width:18px;height:18px;flex:none}
+.rec{grid-column:1/-1;background:var(--rec);color:#fff;border:0;padding:17px 12px;font-size:17px;border-radius:16px}
+.rec.on{animation:pulse 1s ease-in-out infinite}
+.rec:disabled{opacity:.6}
+.primary{grid-column:1/-1;background:var(--accent);color:var(--accent-ink);border:0;padding:15px 12px;font-size:16px;border-radius:16px}
+@keyframes pulse{50%{box-shadow:0 0 0 8px color-mix(in srgb,var(--rec) 25%,transparent)}}
+@media (prefers-reduced-motion: reduce){.rec.on{animation:none}}
+
+.hud{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.hud div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 10px;display:flex;flex-direction:column}
+.hud small{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.hud b{font-size:20px;font-variant-numeric:tabular-nums}
+.hud .combo b{color:var(--t3)}
+
+.summary{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:12px;align-items:stretch}
+.summary h2{margin:0;font-size:20px}
+.stars{font-size:34px;letter-spacing:4px;color:var(--t3)}
+.stars .off{color:var(--line)}
+.bars{display:flex;flex-direction:column;gap:6px}
+.bar{display:grid;grid-template-columns:70px 1fr 38px;align-items:center;gap:8px;font-size:13px}
+.bar .track{height:10px;border-radius:6px;background:var(--soft);overflow:hidden}
+.bar .fill{height:100%;background:var(--tc);border-radius:6px}
+.bar span:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+
+footer{font-size:12.5px;color:var(--muted);line-height:1.55}
+footer p{margin:0 0 6px}
+
+dialog{border:0;border-radius:18px;padding:20px;background:var(--surface);color:var(--ink);max-width:min(340px,92vw)}
+dialog::backdrop{background:rgb(0 0 0 / .45)}
+#qrBox{background:#fff;padding:12px;border-radius:10px;display:grid;place-items:center;min-height:120px}
+#qrUrl{font-size:12px;word-break:break-all;color:var(--muted);margin:10px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="mark han" aria-hidden="true">聲</div>
+      <div><h1>Four Tones</h1><p>四聲練習 · Mandarin tone trainer</p></div>
+    </div>
+    <button id="qrBtn" class="ghost" type="button">Share QR</button>
+  </header>
+
+  <div id="envWarn" class="warn" hidden></div>
+
+  <div class="tabs" role="tablist">
+    <button id="tabPractice" role="tab" aria-selected="true" type="button">Practice <span class="zh">練習</span></button>
+    <button id="tabChallenge" role="tab" aria-selected="false" type="button">Challenge <span class="zh">挑戰</span></button>
+  </div>
+
+  <section id="practicePick" style="display:flex;flex-direction:column;gap:10px">
+    <div class="sets" id="sets" aria-label="Syllable"></div>
+    <div class="tones" id="toneCards"></div>
+  </section>
+
+  <section id="hud" class="hud" hidden>
+    <div><small>Round</small><b id="hRound">1/10</b></div>
+    <div><small>Points</small><b id="hPoints">0</b></div>
+    <div class="combo"><small>Combo</small><b id="hCombo">×0</b></div>
+  </section>
+
+  <section class="stage" id="stage">
+    <div class="prompt" id="prompt"></div>
+    <div class="staffbox"><canvas id="staff" aria-label="Pitch chart: dashed line is the target tone, solid line is your voice"></canvas></div>
+    <div class="legend"><span><i></i>Target tone</span><span><b></b>Your voice</span><span>Lines 1–5 = pitch levels (low → high)</span></div>
+    <div class="result" id="result">
+      <div class="ring" id="ring"><span id="scoreNum">–</span></div>
+      <div class="verdict"><strong id="verdict">Tap the red button and say the word.</strong><small id="detail">Listen first, then say it once, clearly.</small></div>
+    </div>
+  </section>
+
+  <section class="controls" id="controls">
+    <button class="btn" id="listenBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>Listen <span class="zh">聽</span></button>
+    <button class="btn" id="humBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c3-8 6-8 9-4s6 4 9-4"/></svg>Tone melody <span class="zh">旋律</span></button>
+    <button class="btn rec" id="recBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg><span id="recLabel">Tap &amp; say it <span style="opacity:.8">說說看</span></span></button>
+    <button class="btn primary" id="nextBtn" type="button" hidden>Next →</button>
+    <button class="btn primary" id="startBtn" type="button" hidden>Start challenge · 10 words</button>
+  </section>
+
+  <section class="summary" id="summary" hidden></section>
+
+  <footer>
+    <p><strong>How scoring works.</strong> The app tracks the pitch of your voice and compares its <em>shape</em> with the tone contour (Chao numbers 55, 35, 214, 51). Everything runs on your phone; no recording is uploaded.</p>
+    <p>Tip: a quiet room helps. Hold the phone about 20 cm from your mouth. In Taiwan the 3rd tone is often said low without rising (21); both forms count.</p>
+  </footer>
+</div>
+
+<dialog id="qrDlg">
+  <div id="qrBox"></div>
+  <div id="qrUrl"></div>
+  <button class="btn" id="qrClose" type="button" style="width:100%">Close</button>
+</dialog>
+
+<script>
+// ===== CORE-START (pitch analysis; also used by the offline test) =====
+const FMIN = 70, FMAX = 500;
+const K = 2.5; // semitones per Chao level
+const TEMPLATES = {
+  1: [[5,5,5,5,5,5,5,5,5,5,5,5]],
+  2: [[3,2.9,2.85,2.9,3.1,3.4,3.75,4.1,4.45,4.75,4.95,5]],
+  3: [[2.2,1.9,1.6,1.3,1.1,1.0,1.05,1.3,1.8,2.5,3.2,3.8],   // full 214
+      [2.3,2.1,1.9,1.7,1.5,1.35,1.2,1.1,1.05,1,1,1]],        // half third 21 (common in Taiwan)
+  4: [[5,5.05,4.9,4.6,4.2,3.75,3.25,2.75,2.25,1.8,1.4,1.1]],
+};
+const NPTS = 12;
+
+function rmsOf(buf){ let s=0; for(let i=0;i<buf.length;i++) s+=buf[i]*buf[i]; return Math.sqrt(s/buf.length); }
+function median(a){ const b=[...a].sort((x,y)=>x-y); const n=b.length; return n? (n%2? b[(n-1)/2] : (b[n/2-1]+b[n/2])/2) : 0; }
+function mean(a){ return a.reduce((s,v)=>s+v,0)/a.length; }
+
+// YIN pitch detector on one analysis window
+function detectPitch(buf, sr){
+  let x = buf, rate = sr;
+  if (sr > 32000){ const n = buf.length>>1; x = new Float32Array(n); for(let i=0;i<n;i++) x[i]=(buf[2*i]+buf[2*i+1])*0.5; rate = sr/2; }
+  const tauMin = Math.max(2, Math.floor(rate/FMAX));
+  const tauMax = Math.min(Math.floor(rate/FMIN), x.length>>1);
+  const W = x.length - tauMax;
+  const d = new Float32Array(tauMax+1), c = new Float32Array(tauMax+1);
+  for(let tau=1; tau<=tauMax; tau++){ let s=0; for(let j=0;j<W;j++){ const df=x[j]-x[j+tau]; s+=df*df; } d[tau]=s; }
+  c[0]=1; let run=0;
+  for(let tau=1; tau<=tauMax; tau++){ run+=d[tau]; c[tau] = run>0 ? d[tau]*tau/run : 1; }
+  let tau=-1;
+  for(let t=tauMin; t<=tauMax; t++){ if(c[t]<0.15){ while(t+1<=tauMax && c[t+1]<c[t]) t++; tau=t; break; } }
+  if(tau<0){ let m=1, mi=-1; for(let t=tauMin;t<=tauMax;t++) if(c[t]<m){ m=c[t]; mi=t; } if(mi<0 || m>0.35) return {f0:0, conf:1}; tau=mi; }
+  let bt = tau;
+  if(tau>1 && tau<tauMax){ const a=c[tau-1], b=c[tau], e=c[tau+1], den=a+e-2*b; if(den!==0) bt = tau + 0.5*(a-e)/den; }
+  return {f0: rate/bt, conf: c[tau]};
+}
+
+function medianFilter(a, w){ const h=w>>1; return a.map((_,i)=> median(a.slice(Math.max(0,i-h), Math.min(a.length,i+h+1)))); }
+
+// frames: [{t, f0, conf, rms}] -> normalized 12-point contour in semitones (mean 0)
+function processTrack(frames, thr){
+  const ok = frames.map(f => f.rms>thr && f.f0>0 && f.conf<0.25);
+  let best=[0,-1], s=-1, last=-1, gap=0;
+  for(let i=0;i<frames.length;i++){
+    if(ok[i]){ if(s<0) s=i; last=i; gap=0; }
+    else if(s>=0){ if(++gap>3){ if(last-s > best[1]-best[0]) best=[s,last]; s=-1; gap=0; } }
+  }
+  if(s>=0 && last-s > best[1]-best[0]) best=[s,last];
+  const [a,b] = best;
+  if(b-a+1 < 8) return {ok:false, reason:'short'};
+  const seg=[]; for(let i=a;i<=b;i++) if(ok[i]) seg.push({t:frames[i].t, f:frames[i].f0});
+  const med = median(seg.map(p=>p.f));
+  let st = seg.map(p=> 12*Math.log2(p.f/med)).map(v => v>8 ? v-12 : v<-8 ? v+12 : v);
+  st = medianFilter(st, 5);
+  const n = st.length, cut = Math.floor(n*0.08);
+  const ts = seg.map(p=>p.t).slice(cut, n-cut), vs = st.slice(cut, n-cut);
+  const T0 = ts[0], T1 = ts[ts.length-1];
+  if(T1-T0 < 0.12) return {ok:false, reason:'short'};
+  const out=[]; let j=0;
+  for(let k=0;k<NPTS;k++){
+    const tt = T0 + (T1-T0)*k/(NPTS-1);
+    while(j<ts.length-2 && ts[j+1]<tt) j++;
+    const r = ts[j+1]===ts[j] ? 0 : Math.min(1, Math.max(0,(tt-ts[j])/(ts[j+1]-ts[j])));
+    out.push(vs[j] + (vs[j+1]-vs[j])*r);
+  }
+  const m = mean(out);
+  return {ok:true, u: out.map(v=>v-m), dur: T1-T0, medHz: med};
+}
+
+function classify(u){
+  const res = {err:{}, fit:{}};
+  for(const tone of [1,2,3,4]){
+    let bestE = Infinity, bestFit = null;
+    for(const tpl of TEMPLATES[tone]){
+      const tm = mean(tpl), t = tpl.map(v => (v-tm)*K);
+      const tt = t.reduce((s,v)=>s+v*v,0);
+      const sc = tt>0 ? Math.min(1.5, Math.max(0.6, u.reduce((s,v,i)=>s+v*t[i],0)/tt)) : 0;
+      const e = Math.sqrt(mean(u.map((v,i)=> (v - sc*t[i])**2)));
+      if(e<bestE){ bestE=e; bestFit={tpl, tm, scale:sc}; }
+    }
+    res.err[tone]=bestE; res.fit[tone]=bestFit;
+  }
+  res.best = [1,2,3,4].reduce((b,t)=> res.err[t]<res.err[b] ? t : b, 1);
+  return res;
+}
+
+function scoreFor(target, cls){
+  const e = cls.err[target];
+  let s = 100*Math.exp(-((e/2.2)**2));
+  if(cls.best!==target && cls.err[cls.best] < e-0.25) s = Math.min(s, 40);
+  return Math.round(s);
+}
+// ===== CORE-END =====
+
+// ---------- content ----------
+const SETS = [
+  {id:'ma',   items:[['媽','mā','mother'],['麻','má','hemp; numb'],['馬','mǎ','horse'],['罵','mà','to scold']]},
+  {id:'ba',   items:[['八','bā','eight'],['拔','bá','to pull out'],['把','bǎ','to hold'],['爸','bà','dad']]},
+  {id:'yi',   items:[['衣','yī','clothes'],['姨','yí','aunt'],['椅','yǐ','chair'],['意','yì','meaning']]},
+  {id:'tang', items:[['湯','tāng','soup'],['糖','táng','sugar; candy'],['躺','tǎng','to lie down'],['燙','tàng','very hot']]},
+  {id:'shi',  items:[['詩','shī','poem'],['十','shí','ten'],['史','shǐ','history'],['是','shì','to be']]},
+];
+const TONE = {
+  1:{name:'1st tone', zh:'一聲', chao:'55',  hint:'Start high and stay level, like singing one note.'},
+  2:{name:'2nd tone', zh:'二聲', chao:'35',  hint:'Start in the middle and rise, like asking “Huh?”'},
+  3:{name:'3rd tone', zh:'三聲', chao:'214', hint:'Go low and dip down; you may rise a little at the end.'},
+  4:{name:'4th tone', zh:'四聲', chao:'51',  hint:'Start high and drop fast, like saying “No!”'},
+};
+
+// ---------- state ----------
+const $ = id => document.getElementById(id);
+const store = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} } };
+const state = {
+  mode:'practice', set:0, tone:1, recording:false, last:null, baseHz: store.get('ft.baseHz') || 0,
+  scores: {}, // practice: "set-tone" -> best
+  ch:null,
+};
+
+// ---------- environment checks ----------
+(function envCheck(){
+  const ua = navigator.userAgent, warn = $('envWarn');
+  if(/\bLine\//i.test(ua) && !/openExternalBrowser=1/.test(location.search)){
+    try{ const u = new URL(location.href); u.searchParams.set('openExternalBrowser','1'); location.replace(u.toString()); return; }catch(e){}
+  }
+  const msgs=[];
+  if(/MicroMessenger|FBAN|FBAV|Instagram|Line\//i.test(ua)) msgs.push('This app browser may block the microphone. Open this page in Safari or Chrome. 請用 Safari 或 Chrome 開啟。');
+  if(!window.isSecureContext || !(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) msgs.push('Microphone is unavailable here. The page must be opened from an https:// link. 麥克風需要 https 網址。');
+  if(msgs.length){ warn.textContent = msgs.join(' '); warn.hidden=false; }
+})();
+
+// ---------- UI build ----------
+function css(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+function toneColor(t){ return `var(--t${t})`; }
+
+function renderSets(){
+  const box=$('sets'); box.innerHTML='';
+  SETS.forEach((s,i)=>{
+    const b=document.createElement('button'); b.type='button'; b.textContent=s.id; b.setAttribute('aria-pressed', i===state.set);
+    b.onclick=()=>{ state.set=i; state.last=null; renderSets(); renderCards(); renderPrompt(); resetResult(); drawStaff(); };
+    box.appendChild(b);
+  });
+}
+function renderCards(){
+  const box=$('toneCards'); box.innerHTML='';
+  SETS[state.set].items.forEach((it,i)=>{
+    const t=i+1, b=document.createElement('button'); b.type='button'; b.className='tone';
+    b.style.setProperty('--tc', toneColor(t)); b.setAttribute('aria-pressed', t===state.tone);
+    const best = state.scores[`${state.set}-${t}`];
+    b.innerHTML = `<span class="han">${it[0]}</span><span class="py">${it[1]}</span><span class="chao">${TONE[t].chao}</span>` + (best!=null? `<span class="badge">${best}</span>`:'');
+    b.onclick=()=>{ state.tone=t; state.last=null; renderCards(); renderPrompt(); resetResult(); drawStaff(); };
+    box.appendChild(b);
+  });
+}
+function current(){
+  if(state.mode==='challenge' && state.ch && state.ch.round < state.ch.list.length){ const q=state.ch.list[state.ch.round]; return {set:q.set, tone:q.tone}; }
+  return {set:state.set, tone:state.tone};
+}
+function renderPrompt(){
+  const {set,tone}=current(), it=SETS[set].items[tone-1], p=$('prompt');
+  const hidePinyinTone = false;
+  p.style.setProperty('--tc', toneColor(tone));
+  $('stage').style.setProperty('--tc', toneColor(tone));
+  p.innerHTML = `<span class="big han">${it[0]}</span><span class="meta"><span class="tname">${TONE[tone].name} · ${TONE[tone].zh} · ${TONE[tone].chao}</span><span class="py">${it[1]}</span><span class="gloss">${it[2]}</span></span>`;
+}
+function resetResult(){
+  setRing(null); $('verdict').textContent = state.mode==='challenge' ? 'Listen, then tap the red button.' : 'Tap the red button and say the word.';
+  $('detail').textContent = TONE[current().tone].hint;
+}
+function setRing(score, tone){
+  const r=$('ring');
+  if(score==null){ r.style.setProperty('--p',0); $('scoreNum').textContent='–'; return; }
+  r.style.setProperty('--p',score); r.style.setProperty('--rc', score>=70? toneColor(tone) : 'var(--muted)');
+  $('scoreNum').textContent=score;
+}
+
+// ---------- staff drawing ----------
+const canvas=$('staff'), g=canvas.getContext('2d');
+let liveSt=[]; // live points {x01, level}
+function drawStaff(){
+  const dpr=window.devicePixelRatio||1, w=canvas.clientWidth, h=canvas.clientHeight;
+  if(!w) return;
+  canvas.width=Math.round(w*dpr); canvas.height=Math.round(h*dpr); g.setTransform(dpr,0,0,dpr,0,0);
+  g.clearRect(0,0,w,h);
+  const padL=26, padR=12, top=12, bot=12;
+  const X = x01 => padL + x01*(w-padL-padR);
+  const Y = L => top + (5.5-L)/5*(h-top-bot);
+  g.font='600 11px '+css('--font-ui'); g.textAlign='center'; g.textBaseline='middle';
+  for(let L=1;L<=5;L++){
+    g.strokeStyle=css('--line'); g.lineWidth=1; g.beginPath(); g.moveTo(padL,Y(L)); g.lineTo(w-padR,Y(L)); g.stroke();
+    g.fillStyle=css('--muted'); g.fillText(String(L), 11, Y(L));
+  }
+  const {tone}=current(), tc=css('--t'+tone);
+  // target contour (best-fitting variant if we have a result)
+  const tpl = state.last && state.last.cls ? state.last.cls.fit[tone].tpl : TEMPLATES[tone][0];
+  const line=(pts, color, width, dash)=>{ g.strokeStyle=color; g.lineWidth=width; g.setLineDash(dash||[]); g.lineCap='round'; g.lineJoin='round'; g.beginPath(); pts.forEach((p,i)=> i? g.lineTo(X(p[0]),Y(p[1])) : g.moveTo(X(p[0]),Y(p[1]))); g.stroke(); g.setLineDash([]); };
+  g.globalAlpha=.9; line(tpl.map((L,i)=>[0.06+0.88*i/(NPTS-1), L]), tc, 5, [9,7]); g.globalAlpha=1;
+  // user
+  const ink=css('--ink');
+  if(state.recording && liveSt.length){
+    g.fillStyle=ink; liveSt.forEach(p=>{ g.beginPath(); g.arc(X(p[0]), Y(Math.max(0.6,Math.min(5.4,p[1]))), 2.4, 0, Math.PI*2); g.fill(); });
+  } else if(state.last && state.last.proc && state.last.proc.ok){
+    const fit=state.last.cls.fit[tone], center=fit.tm;
+    const pts=state.last.proc.u.map((v,i)=>[0.06+0.88*i/(NPTS-1), Math.max(0.6,Math.min(5.4, center + v/K))]);
+    line(pts, ink, 3.5);
+    g.fillStyle=ink; pts.forEach(p=>{ g.beginPath(); g.arc(X(p[0]),Y(p[1]),3,0,Math.PI*2); g.fill(); });
+  }
+}
+window.addEventListener('resize', drawStaff);
+try{ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', drawStaff); }catch(e){}
+
+// ---------- audio ----------
+let ctx=null, stream=null, analyser=null, buf=null;
+function getCtx(){
+  if(!ctx){ const AC = window.AudioContext||window.webkitAudioContext; ctx = new AC(); }
+  if(ctx.state==='suspended') ctx.resume();
+  return ctx;
+}
+async function ensureMic(){
+  if(stream && stream.active) return;
+  stream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false, noiseSuppression:false, autoGainControl:false}});
+  const src = ctx.createMediaStreamSource(stream);
+  analyser = ctx.createAnalyser(); analyser.fftSize=2048; buf=new Float32Array(analyser.fftSize);
+  src.connect(analyser);
+}
+
+const MAXDUR=2.6;
+async function record(){
+  if(state.recording) return;
+  if(state.mode==='challenge' && state.ch && state.ch.answered) return;
+  getCtx();
+  try{ await ensureMic(); }
+  catch(e){
+    $('verdict').textContent='Microphone blocked';
+    $('detail').textContent='Allow microphone access in your browser settings, then reload this page. 請允許使用麥克風。';
+    return;
+  }
+  window.speechSynthesis && speechSynthesis.cancel();
+  state.recording=true; state.last=null; liveSt=[];
+  const btn=$('recBtn'); btn.classList.add('on'); $('recLabel').textContent='Listening… 聆聽中';
+  $('verdict').textContent='Say it now'; $('detail').textContent='Say the word once. It stops by itself.'; setRing(null);
+  const frames=[], t0=ctx.currentTime; let thr=null, voiced=false, lastV=0, lastT=-1;
+  await new Promise(resolve=>{
+    function tick(){
+      const t=ctx.currentTime-t0;
+      if(t-lastT >= 0.014){
+        lastT=t;
+        analyser.getFloatTimeDomainData(buf);
+        const r=rmsOf(buf), p=detectPitch(buf, ctx.sampleRate);
+        frames.push({t, f0:p.f0, conf:p.conf, rms:r});
+        if(thr==null && t>=0.12){ thr=Math.max(0.008, median(frames.map(f=>f.rms))*2.2); }
+        if(thr!=null && r>thr && p.f0>0 && p.conf<0.25){
+          voiced=true; lastV=t;
+          const med=median(frames.filter(f=>f.rms>thr && f.f0>0 && f.conf<0.25).map(f=>f.f0));
+          liveSt.push([Math.min(1,t/MAXDUR), 3 + 12*Math.log2(p.f0/med)/K]);
+          drawStaff();
+        }
+      }
+      if(t>=MAXDUR || (voiced && t-lastV>0.35)) return resolve();
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+  state.recording=false; btn.classList.remove('on'); $('recLabel').innerHTML='Tap &amp; say it <span style="opacity:.8">說說看</span>';
+  evaluate(frames, thr ?? 0.01);
+}
+
+function evaluate(frames, thr){
+  const {set,tone}=current();
+  const proc=processTrack(frames, thr);
+  if(!proc.ok){
+    state.last=null; drawStaff(); setRing(null);
+    $('verdict').textContent='I couldn’t hear you clearly'; $('detail').textContent='Speak a little louder and closer to the phone, then try again.';
+    return;
+  }
+  const cls=classify(proc.u), score=scoreFor(tone, cls);
+  state.last={proc, cls, score};
+  state.baseHz = state.baseHz ? state.baseHz*0.7 + proc.medHz*0.3 : proc.medHz; store.set('ft.baseHz', state.baseHz);
+  setRing(score, tone); drawStaff();
+  $('verdict').textContent = score>=85 ? 'Excellent! 很好！' : score>=70 ? 'Good! 不錯！' : score>=50 ? 'Almost. 再試試' : 'Try again. 再一次';
+  const heard = cls.best===tone ? `Sounded like the ${TONE[tone].name}.` : `Sounded more like the ${TONE[cls.best].name} (${TONE[cls.best].chao}).`;
+  $('detail').textContent = score>=85 ? heard : `${heard} ${TONE[tone].hint}`;
+  if(state.mode==='practice'){
+    const k=`${set}-${tone}`; state.scores[k]=Math.max(state.scores[k]||0, score); store.set('ft.scores', state.scores); renderCards();
+  } else challengeAnswer(score, tone);
+}
+
+// reference audio: speech synthesis (prototype only; replace with your own recordings)
+function pickVoice(){
+  const vs=speechSynthesis.getVoices();
+  return vs.find(v=>/zh[-_]TW/i.test(v.lang)) || vs.find(v=>/^zh/i.test(v.lang)) || null;
+}
+function speak(){
+  const {set,tone}=current(), it=SETS[set].items[tone-1];
+  if(!('speechSynthesis' in window)){ $('detail').textContent='This browser cannot read aloud. Use “Tone melody”.'; return; }
+  const v=pickVoice();
+  if(!v){ $('detail').textContent='No Chinese voice on this device. Use “Tone melody” to hear the tone shape.'; }
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(it[0]); u.lang= v? v.lang : 'zh-TW'; if(v) u.voice=v; u.rate=0.75;
+  speechSynthesis.speak(u);
+}
+try{ speechSynthesis.onvoiceschanged=()=>{}; speechSynthesis.getVoices(); }catch(e){}
+
+function hum(){
+  const c=getCtx(), {tone}=current(), tpl=TEMPLATES[tone][0];
+  const base = state.baseHz || 190;
+  const dur = tone===3? 0.75 : tone===4? 0.45 : 0.6;
+  const curve=new Float32Array(48);
+  for(let i=0;i<curve.length;i++){ const x=i/(curve.length-1)*(NPTS-1), j=Math.min(NPTS-2,Math.floor(x)), L=tpl[j]+(tpl[j+1]-tpl[j])*(x-j); curve[i]=base*Math.pow(2,((L-3.5)*K)/12); }
+  const o=c.createOscillator(), f=c.createBiquadFilter(), gn=c.createGain(), t=c.currentTime+0.03;
+  o.type='sawtooth'; f.type='lowpass'; f.frequency.value=1400;
+  o.frequency.setValueAtTime(curve[0], t); o.frequency.setValueCurveAtTime(curve, t, dur);
+  gn.gain.setValueAtTime(0.0001,t); gn.gain.exponentialRampToValueAtTime(0.22,t+0.04); gn.gain.setValueAtTime(0.22,t+dur-0.08); gn.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(f).connect(gn).connect(c.destination); o.start(t); o.stop(t+dur+0.02);
+}
+
+// ---------- challenge ----------
+function newChallenge(){
+  const tones=[1,1,1,2,2,2,3,3,4,4].sort(()=>Math.random()-0.5);
+  let prevSet=-1;
+  const list=tones.map(t=>{ let s; do{ s=Math.floor(Math.random()*SETS.length); }while(s===prevSet); prevSet=s; return {set:s, tone:t}; });
+  state.ch={list, round:0, points:0, combo:0, answered:false, results:[]};
+}
+function updateHud(){
+  const ch=state.ch; if(!ch) return;
+  $('hRound').textContent=`${Math.min(ch.round+1,ch.list.length)}/${ch.list.length}`;
+  $('hPoints').textContent=ch.points; $('hCombo').textContent='×'+ch.combo;
+}
+function challengeAnswer(score, tone){
+  const ch=state.ch; ch.answered=true;
+  ch.combo = score>=70 ? ch.combo+1 : 0;
+  const pts=Math.round(score*(1+0.1*Math.min(ch.combo,5)));
+  ch.points+=pts; ch.results.push({tone, score});
+  updateHud();
+  $('detail').textContent += `  +${pts} pts` + (ch.combo>=2? ` · combo ×${ch.combo}`:'');
+  $('recBtn').hidden=true; $('nextBtn').hidden=false; $('nextBtn').textContent = ch.round+1>=ch.list.length ? 'See results →' : 'Next →';
+}
+function nextRound(){
+  const ch=state.ch; ch.round++; ch.answered=false; state.last=null;
+  if(ch.round>=ch.list.length) return showSummary();
+  $('recBtn').hidden=false; $('nextBtn').hidden=true;
+  updateHud(); renderPrompt(); resetResult(); drawStaff();
+}
+function showSummary(){
+  const ch=state.ch, avg=Math.round(mean(ch.results.map(r=>r.score)));
+  const stars = avg>=80?3: avg>=65?2: avg>=50?1:0;
+  const best=Math.max(store.get('ft.best')||0, ch.points); store.set('ft.best', best);
+  const per=[1,2,3,4].map(t=>{ const rs=ch.results.filter(r=>r.tone===t); return [t, rs.length? Math.round(mean(rs.map(r=>r.score))) : null]; });
+  const sm=$('summary');
+  sm.innerHTML = `<h2>Challenge complete <span class="zh">完成！</span></h2>
+    <div class="stars" aria-label="${stars} of 3 stars">${'★'.repeat(stars)}<span class="off">${'★'.repeat(3-stars)}</span></div>
+    <div class="hud" style="grid-template-columns:repeat(3,1fr)"><div><small>Points</small><b>${ch.points}</b></div><div><small>Average</small><b>${avg}</b></div><div><small>Best</small><b>${best}</b></div></div>
+    <div class="bars">${per.map(([t,v])=>`<div class="bar" style="--tc:${toneColor(t)}"><span>${TONE[t].name}</span><span class="track"><span class="fill" style="display:block;width:${v||0}%"></span></span><span>${v??'–'}</span></div>`).join('')}</div>
+    <small class="zh">${weakest(per)}</small>`;
+  sm.hidden=false; $('stage').hidden=true; $('hud').hidden=true; $('controls').hidden=false;
+  ['listenBtn','humBtn','recBtn','nextBtn'].forEach(id=>$(id).hidden=true);
+  $('startBtn').hidden=false; $('startBtn').textContent='Play again · 再玩一次';
+}
+function weakest(per){
+  const v=per.filter(p=>p[1]!=null).sort((a,b)=>a[1]-b[1])[0];
+  return v && v[1]<80 ? `Practice next: ${TONE[v[0]].name} (${TONE[v[0]].zh}). ${TONE[v[0]].hint}` : 'Great control of all four tones!';
+}
+function startChallenge(){
+  newChallenge(); $('summary').hidden=true; $('stage').hidden=false; $('hud').hidden=false;
+  ['listenBtn','humBtn','recBtn'].forEach(id=>$(id).hidden=false); $('nextBtn').hidden=true; $('startBtn').hidden=true;
+  updateHud(); renderPrompt(); resetResult(); drawStaff();
+}
+
+function setMode(m){
+  state.mode=m; state.last=null;
+  $('tabPractice').setAttribute('aria-selected', m==='practice'); $('tabChallenge').setAttribute('aria-selected', m==='challenge');
+  $('practicePick').hidden = m!=='practice';
+  $('summary').hidden=true;
+  if(m==='practice'){
+    $('hud').hidden=true; $('stage').hidden=false; ['listenBtn','humBtn','recBtn'].forEach(id=>$(id).hidden=false);
+    $('nextBtn').hidden=true; $('startBtn').hidden=true;
+    renderSets(); renderCards(); renderPrompt(); resetResult(); drawStaff();
+  } else {
+    state.ch=null; $('hud').hidden=true; $('stage').hidden=true;
+    ['listenBtn','humBtn','recBtn','nextBtn'].forEach(id=>$(id).hidden=true);
+    $('startBtn').hidden=false; $('startBtn').textContent='Start challenge · 10 words';
+    const sm=$('summary'); sm.hidden=false;
+    sm.innerHTML=`<h2>Tone Challenge <span class="zh">聲調挑戰</span></h2><p style="margin:0">10 words, one try each. Score 70+ in a row to build a combo and earn bonus points.</p><p class="zh" style="margin:0">十個字，每個字說一次。連續 70 分以上可以累積連擊加分。</p>` + (store.get('ft.best')? `<p style="margin:0">Your best: <b>${store.get('ft.best')}</b> pts</p>`:'');
+  }
+}
+
+// ---------- QR ----------
+function showQR(){
+  const dlg=$('qrDlg'), box=$('qrBox'), url=location.href.replace(/[?&]openExternalBrowser=1/,'');
+  $('qrUrl').textContent = location.protocol==='file:' ? 'Put this page on an https:// web address first, then this QR code will open it on phones.' : url;
+  box.innerHTML='';
+  const draw=()=>{ try{ new QRCode(box,{text:url,width:220,height:220,colorDark:'#15202B',colorLight:'#FFFFFF'}); }catch(e){ box.textContent='QR unavailable'; } };
+  if(window.QRCode) draw(); else { const s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; s.onload=draw; s.onerror=()=>box.textContent='QR library could not load (offline?)'; document.head.appendChild(s); }
+  if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open','');
+}
+
+// ---------- wire ----------
+state.scores = store.get('ft.scores') || {};
+$('recBtn').onclick=record; $('listenBtn').onclick=speak; $('humBtn').onclick=hum;
+$('nextBtn').onclick=nextRound; $('startBtn').onclick=startChallenge;
+$('tabPractice').onclick=()=>setMode('practice'); $('tabChallenge').onclick=()=>setMode('challenge');
+$('qrBtn').onclick=showQR; $('qrClose').onclick=()=>$('qrDlg').close ? $('qrDlg').close() : $('qrDlg').removeAttribute('open');
+setMode('practice');
+if(document.fonts) document.fonts.ready.then(drawStaff);
+</script>
+</body>
+</html>
